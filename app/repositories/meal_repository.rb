@@ -1,3 +1,4 @@
+# require the library
 require 'csv'
 require_relative '../models/meal'
 
@@ -9,23 +10,26 @@ class MealRepository
     load_csv if File.exist?(@csv_file)
   end
 
+  def all
+    @meals
+  end
+
   def create(meal)
     meal.id = @next_id
     @meals << meal
-
     @next_id += 1
 
     save_to_csv
   end
 
-  def all
-    @meals
-  end
-
   def find(meal_id)
+    # @meals.select { |meal| meal.id == meal_id }.first
     @meals.find { |meal| meal.id == meal_id }
   end
 
+  def update
+    save_to_csv
+  end
 
   private
 
@@ -36,12 +40,12 @@ class MealRepository
       @meals << Meal.new(row)
     end
 
-    @next_id = @meals.last.id + 1 if @meals.any?
+    @next_id = @meals.last.id + 1 if @meals.any? # unless @meals.empty?
   end
 
   def save_to_csv
-    CSV.open(@csv_file, 'wb') do |csv|
-      csv << ['id', 'name', 'price']
+    CSV.open(@csv_file, "wb") do |csv|
+      csv << ["id", "name", "price"]
       @meals.each do |meal|
         csv << [meal.id, meal.name, meal.price]
       end

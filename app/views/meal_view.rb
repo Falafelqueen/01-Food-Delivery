@@ -1,8 +1,7 @@
-class MealsView
+class MealView
   def display(meals)
-    puts "-------------"
     meals.each do |meal|
-      puts "#{meal.id} - #{meal.name} - #{meal.price}"
+      puts "#{meal.id} - #{meal.name} - #{meal.price}€"
     end
   end
 
@@ -10,4 +9,5 @@ class MealsView
     puts "#{stuff}?"
     gets.chomp
   end
+
 end
